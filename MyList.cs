@@ -23,6 +23,9 @@ namespace CustomListApp
                 if (_currentEnumerator != null)
                     throw new InvalidOperationException(LIST_CHANGING_ERROR);
 
+                if (index >= _count)
+                    throw new ArgumentOutOfRangeException();
+
                 _data[index] = value;
             }
         }
