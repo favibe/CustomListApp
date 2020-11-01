@@ -7,6 +7,7 @@ namespace CustomListApp
 {
     public class CustomEnumerator<T> : IEnumerator<T>
     {
+        public event Action Disposed;
         public CustomEnumerator(T[] dataSet, int count)
         {
             _data = dataSet;
@@ -31,6 +32,7 @@ namespace CustomListApp
 
         public void Dispose()
         {
+            Disposed?.Invoke();
             return;
         }
 

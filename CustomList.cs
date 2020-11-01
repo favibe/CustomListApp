@@ -20,6 +20,9 @@ namespace CustomListApp
             }
             set
             {
+                if (_currentEnumerator != null)
+                    throw new InvalidOperationException(LIST_CHANGING_ERROR);
+
                 _data[index] = value;
             }
         }
@@ -36,6 +39,9 @@ namespace CustomListApp
 
         public void Add(T item)
         {
+            if (_currentEnumerator != null)
+                throw new InvalidOperationException(LIST_CHANGING_ERROR);
+
             _count++;
 
             if (_count >= _data.Length)
@@ -49,6 +55,9 @@ namespace CustomListApp
 
         public void Clear()
         {
+            if (_currentEnumerator != null)
+                throw new InvalidOperationException(LIST_CHANGING_ERROR);
+
             _count = 0;
             _data = new T[0];
         }
@@ -74,7 +83,10 @@ namespace CustomListApp
 
         public IEnumerator<T> GetEnumerator()
         {
-            return new CustomEnumerator<T>(_data, _count);
+            _currentEnumerator = new CustomEnumerator<T>(_data, _count);
+            _currentEnumerator.Disposed += DisposeEnumerator;
+
+            return _currentEnumerator;
         }
 
         public int IndexOf(T item)
@@ -92,6 +104,9 @@ namespace CustomListApp
 
         public void Insert(int index, T item)
         {
+            if (_currentEnumerator != null)
+                throw new InvalidOperationException(LIST_CHANGING_ERROR);
+
             if (index > Count - 1 || index < 0)
                 throw new ArgumentOutOfRangeException();
 
@@ -112,6 +127,9 @@ namespace CustomListApp
 
         public bool Remove(T item)
         {
+            if (_currentEnumerator != null)
+                throw new InvalidOperationException(LIST_CHANGING_ERROR);
+
             int index = IndexOf(item);
 
             if (index != -1)
@@ -137,7 +155,12 @@ namespace CustomListApp
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return new CustomEnumerator<T>(_data, _count);
+            return GetEnumerator();
+        }
+
+        private void DisposeEnumerator()
+        {
+            _currentEnumerator = null;
         }
 
         private void Resize()
@@ -154,5 +177,9 @@ namespace CustomListApp
 
         private T[] _data;
         private int _count;
+
+        private const string LIST_CHANGING_ERROR = "List changing is not allowed, while enumerator exist";
+
+        private CustomEnumerator<T> _currentEnumerator;
     }
 }
