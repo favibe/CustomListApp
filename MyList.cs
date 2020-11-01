@@ -173,10 +173,7 @@ namespace CustomListApp
 
             _data = new T[_count * 2];
 
-            for (int i = 0; i < temp.Length; i++)
-            {
-                _data[i] = temp[i];
-            }
+            Array.Copy(temp, _data, temp.Length);
         }
 
         private T[] _data;
