@@ -7,7 +7,7 @@ namespace CustomListApp
     {
         static void Main(string[] args)
         {
-            CustomList<int> list = new CustomList<int>();
+            MyList<int> list = new MyList<int>();
 
             for (int i = 0; i < 1000; i++)
             {

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace CustomListApp
 {
-    public class CustomList<T> : IList<T>
+    public class MyList<T> : IList<T>
     {
-        public CustomList(int capacity = 0)
+        public MyList(int capacity = 0)
         {
             _data = new T[capacity];
         }
@@ -83,8 +83,8 @@ namespace CustomListApp
 
         public IEnumerator<T> GetEnumerator()
         {
-            _currentEnumerator = new CustomEnumerator<T>(_data, _count);
-            _currentEnumerator.Disposed += DisposeEnumerator;
+            _currentEnumerator = new MyEnumerator<T>(_data, _count);
+            _currentEnumerator.Disposed += OnDisposeEnumerator;
 
             return _currentEnumerator;
         }
@@ -158,8 +158,9 @@ namespace CustomListApp
             return GetEnumerator();
         }
 
-        private void DisposeEnumerator()
+        private void OnDisposeEnumerator()
         {
+            _currentEnumerator.Disposed -= OnDisposeEnumerator;
             _currentEnumerator = null;
         }
 
@@ -180,6 +181,6 @@ namespace CustomListApp
 
         private const string LIST_CHANGING_ERROR = "List changing is not allowed, while enumerator exist";
 
-        private CustomEnumerator<T> _currentEnumerator;
+        private MyEnumerator<T> _currentEnumerator;
     }
 }

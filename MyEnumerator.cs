@@ -5,10 +5,10 @@ using System.Text;
 
 namespace CustomListApp
 {
-    public class CustomEnumerator<T> : IEnumerator<T>
+    public class MyEnumerator<T> : IEnumerator<T>
     {
         public event Action Disposed;
-        public CustomEnumerator(T[] dataSet, int count)
+        public MyEnumerator(T[] dataSet, int count)
         {
             _data = dataSet;
             _count = count;
